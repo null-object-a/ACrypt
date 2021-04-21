@@ -1,43 +1,41 @@
---setreadonly(string,false) Uncomment this if you're using RLua
-string.startsWith = function(orig,m) 
-    return orig:find(m) == 1
-end  
-string.replace = function(orig,subs,rstr) 
-    return orig:gsub(subs, rstr)
+setreadonly(string,false)
+SUM = function(str) 
+    local sum = 0
+    for c in str:gmatch"." do
+      sum = sum + c:byte()
+    end
+    return sum 
 end
-EncodeA = function(str) 
+EncodeA = function(str,key) 
     local fields = { str:match( (str:gsub(".", "(.)")) ) }
     local rel = ""
     for i,v in pairs(fields) do
-       rel = rel.."/"..tostring(v:byte()) 
+       rel = rel.."/"..tostring(v:byte() * key) 
     end
     return string.reverse(rel)
   end
-DecodeA = function(str) 
+DecodeA = function(str,key) 
     local tab = string.split(string.reverse(str), '/')
     local rel = ""
     for i,v in pairs(tab) do 
          if v == "" or v == " " then else
-             rel=rel..string.char(tonumber(v))
+             rel=rel..string.char(tonumber(v/key))
          end
     end
     return rel
  end
 
-EncodeB = function(str)
-        local tmp = EncodeA(str)
+EncodeB = function(str,key)
+        local tmp = EncodeA(str,SUM(key))
         tmp = "[ACRYPT] "..string.reverse(tmp)
         return tmp
 end
 
-DecodeB = function(str) 
+DecodeB = function(str,key) 
     if str:find("[ACRYPT] ") == 1 then
-        --print("[DEBUG] Decrypting.")
         if str:match("[\/]") then 
-           --print("[DEBUG] Decrypting stage 2.")
             local tmp = string.reverse(str:gsub("%[ACRYPT%] ", ""))
-            return DecodeA(tmp)
+            return DecodeA(tmp,SUM(key))
         end
     end
 end
- 

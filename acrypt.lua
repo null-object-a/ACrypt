@@ -1,4 +1,4 @@
-setreadonly(string,false)
+--setreadonly(string,false) Uncomment this if you're using RLua
 string.startsWith = function(orig,m) 
     return orig:find(m) == 1
 end  
@@ -31,7 +31,7 @@ EncodeB = function(str)
 end
 
 DecodeB = function(str) 
-    if str:find("%[ACRYPT%] ") == 1 then
+    if str:find("[ACRYPT] ") == 1 then
         --print("[DEBUG] Decrypting.")
         if str:match("[\/]") then 
            --print("[DEBUG] Decrypting stage 2.")
@@ -40,8 +40,4 @@ DecodeB = function(str)
         end
     end
 end
-local c = EncodeB("BaxoPlenty is cute uwu")
-print(c)
-setclipboard(c)
-print(DecodeB(c))
  

@@ -1,3 +1,8 @@
 # ACrypt
-```
-  i didn't find any encryption libraries for Lua so i made my own and i will be porting it to another programming languages
+ stupid ass "crypto" lib who can run extremely fast in any language
+# Language Support
+- Lua/RLua (implement string.split by yourself if using vanilla Lua)
+- PHP
+- C#
+- JavaScript
+- C++ (soon i don't have time die)

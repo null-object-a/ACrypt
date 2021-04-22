@@ -4,7 +4,7 @@ String.prototype.reverse=function() {return this.split("").reverse().join("");}
         for (var x = 0; x < key.length; x++)
         {
             var c = key.charAt(x);
-            result += c.charCodeAt(0);
+            result += c.charCodeAt(0) * key.length;
         }
         return result
     }
@@ -44,7 +44,6 @@ String.prototype.reverse=function() {return this.split("").reverse().join("");}
         try {
             if (text.startsWith("[ACRYPT]")) {
                 var tmp = text.replace("[ACRYPT] ","").reverse();
-                console.log(DecodeA(tmp,key))
                 return DecodeA(tmp,key)
             }
             return ""
@@ -52,4 +51,4 @@ String.prototype.reverse=function() {return this.split("").reverse().join("");}
             return err;
         }
     }
-    console.log(encrypt("anus","sex"))
+    console.log(decrypt("[ACRYPT] 114492/99687/113505/114492","key"))

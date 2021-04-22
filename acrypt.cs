@@ -26,7 +26,7 @@ namespace ACrypt {
             byte[] bytes = Encoding.ASCII.GetBytes(key);
             int rel = 0;
             foreach(byte b in bytes) {
-                rel += (int)b;
+                rel += (int)b * key.length;
             }
             return rel;
         }

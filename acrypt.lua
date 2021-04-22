@@ -1,8 +1,8 @@
-setreadonly(string,false)
+--setreadonly(string,false)
 SUM = function(str) 
     local sum = 0
     for c in str:gmatch"." do
-      sum = sum + c:byte()
+      sum = sum + c:byte() * #str
     end
     return sum 
 end

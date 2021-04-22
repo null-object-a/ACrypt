@@ -1,4 +1,12 @@
---setreadonly(string,false)
+if string.split == nil then --For vanilla Lua
+    string.split = function(str, delimit)
+        local result = {};
+        for match in (str..delimit):gmatch("(.-)"..delimit) do
+             table.insert(result, match);
+        end
+        return result; 
+    end
+end
 SUM = function(str) 
     local sum = 0
     for c in str:gmatch"." do

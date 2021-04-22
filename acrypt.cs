@@ -25,6 +25,7 @@ namespace ACrypt {
                 List<int> list = new List<int>(result);
                 list.Add((int)i * Sum(key));
                 result = list.ToArray();
+                
             }
             string newstr = string.Join("/",result);
             return reverse(newstr);
@@ -33,7 +34,7 @@ namespace ACrypt {
             string result = "";
             string[] e = reverse(text).Split('/');
             foreach(string i in e) {
-              result += (char)int.Parse(i) / Sum(key);
+              result += (char)(int.Parse(i) / Sum(key));
             }
             return result;
         }

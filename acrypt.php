@@ -1,42 +1,66 @@
 <?php
     class ACrypt {
-        function __sum($data) {
+        public $Header = "ACR";
+
+        function RandomDecimal(){
+          return floatval("0.".(string)mt_rand());
+        }
+        function RemoveDecimal($any) {
+          $ErrorMessage = "No decimal-like pattern found.";
+          $type = gettype($any);
+          if ($type == 'string') {
+            if (strpos( $any, '.' ) !== false) {
+             return intval(explode(".", $any)[0]);
+            } 
+            else {
+              die($ErrorMessage);
+            }
+          }
+          elseif ($type == 'integrer'){
+            $any = strval($any);
+            if (strpos( $any, '.' ) !== false) {
+              return intval(explode(".", $any)[0]);
+             } 
+             else {
+               die($ErrorMessage);
+             }
+          }
+          return;
+        }
+        function GetFactors($key) {
+          $c1 = ord(substr($key, 0, 1)) * 2 ;
+          $c2 = ord(substr($key, -1)) * 3 ; 
+          return array($c1, $c2);
+        }
+        function GetMath($data) {
             $result = 0;
-            $data = str_split($data);
-            $kvalc = count($data);
-            foreach($data as $i){
-                $result += ord($i) * $kvalc;
+            foreach(str_split($data) as $i){
+                $result += ord($i) * count(str_split($data)) * $this->GetFactors($data)[0] * $this->GetFactors($data)[1];
             }
             return $result;
         }
-       function EncodeA($data, $key){
+      public function Encrypt($data, $key){
            $result = array();
-           $data = str_split($data);
-           $kval = $this->__sum($key);
-           foreach ($data as $i) {
-            $result[] = ord($i) * $kval;
+           foreach (str_split($data) as $i) {
+             $EncryptionMath = ord($i) * $this->GetMath($key);
+             $result[] = $EncryptionMath + $this->RandomDecimal();
            }
-           return join("/",array_reverse($result));
+           $ToReturn = $this->Header."/".join("/",$result);
+           return $ToReturn;
         }
-        function DecodeA($data, $key){
-          $result = "";
-          $data = explode("/",strrev($data));
-          foreach($data as $i) {
-            $result .= chr($i / $this->__sum($key));
-          }
-          return $result;
-        }
-        public function Encrypt($data, $key) {
-          $tmp = $this->EncodeA($data,$key);
-          $tmp = "[ACRYPT] ". $tmp;
-          return $tmp;
-        }
-        public function Decrypt($data, $key) {
-          if (substr( $data, 0, 8 ) === "[ACRYPT]"){
-           $tmp = strrev(str_replace("[ACRYPT] ","",$data));
-            return $this->DecodeA($tmp,$key);
-          }
-          return "";
+       public function Decrypt($data, $key){
+         if (substr( $data, 0, 3 ) === "ACR") {
+            $DecryptionResult = array();
+            $Math = $this->GetMath($key);
+            $data = explode("/",$data);
+            array_shift($data);
+            foreach($data as $i) {
+              $Decrytion = $this->RemoveDecimal($i) / $Math;
+              $DecryptionResult[] = chr($Decrytion);
+            }
+            return join('',$DecryptionResult);
+         }
+         return "INVALID_CIPHERTEXT"; 
         }
     }
     $acrypt = new ACrypt();
